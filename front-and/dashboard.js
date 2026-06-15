@@ -101,4 +101,4 @@ function buscarTrabalhos() {
 function fazerLogout() {
     localStorage.removeItem("usuario_logado");
     window.location.href = "index.html";
-	
+}
