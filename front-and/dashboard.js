@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const usuario = JSON.parse(infoUsuario);
 	
 	document.getElementById("user-nome").innerText = usuario.nome;
-	document.getElementById("welcome-nome").innerText = usuario.nome.spli("")[0];
+	document.getElementById("welcome-nome").innerText = usuario.nome.split("")[0];
 	document.getElementById("user-status").innerText = usuario.status;
 	
 	const menuEspecifico = document.getElementById("menu-especifico");
