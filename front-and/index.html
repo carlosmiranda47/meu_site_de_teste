@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso - Gerenciador de Projetos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="container-login">
+
+            <h2>Entrar no Sistema</h2>
+
+            <form id="form-login">
+
+                <div class="form-group">
+                    <label for="login-email">E-mail</label>
+                    <input type="email" id="login-email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-senha">Senha</label>
+                    <input type="password" id="login-senha" required>
+                </div>
+
+                <button type="submit">Entrar</button>
+
+            </form>
+
+            <div class="alternar-tela">
+                Não tem uma conta?
+                <a onclick="alternarAbas()">Cadastre-se</a>
+            </div>
+
+        </div>
+
+        <div id="container-cadastro" class="escondido">
+
+            <h2>Criar Conta</h2>
+
+            <form id="form-cadastro">
+
+                <div class="form-group">
+                    <label for="cad-nome">Nome Completo</label>
+                    <input type="text" id="cad-nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-email">E-mail</label>
+                    <input type="email" id="cad-email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-senha">Senha</label>
+                    <input type="password" id="cad-senha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-status">Perfil de Usuário</label>
+
+                    <select id="cad-status" required>
+                        <option value="comum">Usuário Comum</option>
+                        <option value="academico">Acadêmico</option>
+                        <option value="praticante">
+                            Praticante na Área de Trabalho
+                        </option>
+                    </select>
+
+                </div>
+
+                <button type="submit">Cadastrar</button>
+
+            </form>
+
+            <div class="alternar-tela">
+                Já possui conta?
+                <a onclick="alternarAbas()">Faça Login</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

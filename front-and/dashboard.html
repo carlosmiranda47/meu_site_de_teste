@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Geral - Plataforma Acadêmica & Profissional</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div>
+            <div class="brand">
+                <h2>ConectaTrabalhos</h2>
+            </div>
+
+            <div class="user-profile">
+                <h3 id="user-nome">Carregando...</h3>
+                <span id="user-status">...</span>
+            </div>
+
+            <ul class="menu-items">
+                <li><a class="active" href="#">🏠 Dashboard Geral</a></li>
+                <li><a href="#" id="menu-especifico">📁 Meu Espaço</a></li>
+                <li><a href="#">🔍 Pesquisa Avançada</a></li>
+                <li><a href="#">💬 Mensagens</a></li>
+            </ul>
+        </div>
+
+        <button class="btn-logout" onclick="fazerLogout()">🚪 Sair do Sistema</button>
+    </nav>
+
+    <main class="main-content">
+        <header class="header-welcome">
+            <h1>Olá, <span id="welcome-nome">Usuário</span>!</h1>
+            <p>Explore pesquisas acadêmicas e projetos práticos do mercado metropolitano.</p>
+        </header>
+
+        <section class="search-container">
+            <div class="search-title">Encontre artigos, TCCs, dissertações e projetos práticos</div>
+            <div class="search-box">
+                <input type="text" id="busca-input" placeholder="Digite palavras-chave (ex: Automação, Termologia, Urbanismo...)">
+                <select id="filtro-tipo">
+                    <option value="todos">Todos os Perfis</option>
+                    <option value="academico">Acadêmicos</option>
+                    <option value="praticante">Formados / Praticantes</option>
+                </select>
+                <button onclick="buscarTrabalhos()">Pesquisar</button>
+            </div>
+        </section>
+
+        <section class="upload-container">
+            <div class="search-title">📥 Compartilhar Novo Trabalho / Projeto</div>
+            <form id="form-upload">
+                <div class="upload-area" onclick="document.getElementById('campo-arquivo').click()">
+                    <span>📁</span>
+                    <p>Clique para selecionar qualquer arquivo do seu PC (PDF, Imagens, Códigos, ZIP)</p>
+                    <input type="file" id="campo-arquivo" style="display: none;" required>
+                    <div id="nome-arquivo-selecionado">Nenhum arquivo selecionado</div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn-enviar-arq">Enviar Arquivos para o Sistema</button>
+                </div>
+            </form>
+        </section>
+
+        <section>
+            <h2 class="section-title">Publicações Recentes</h2>
+            <div class="grid-trabalhos" id="container-trabalhos">
+                
+                <div class="card-trabalho">
+                    <h3>Sistema de Estacionamento Automatizado em Zonas Urbanas</h3>
+                    <p>Uma abordagem sobre a otimização de espaços metropolitanos utilizando microsserviços Node.js e sensores IoT.</p>
+                    <div class="card-footer">
+                        <span class="autor-badge">Por: Carlos Silva</span>
+                        <span>🎓 Acadêmico</span>
+                    </div>
+                </div>
+
+                <div class="card-trabalho">
+                    <h3>Análise Prática de Dilatação Térmica em Estruturas de Aço</h3>
+                    <p>Estudo de caso focado no comportamento de vigas sob estresse térmico em grandes metrópoles brasileiras.</p>
+                    <div class="card-footer">
+                        <span class="autor-badge">Por: Eng. Mariana Costa</span>
+                        <span>💼 Praticante</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
