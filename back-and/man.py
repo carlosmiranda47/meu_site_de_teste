@@ -1,16 +1,21 @@
 from typing import Optional
 from fastapi import FastAPI, HTTPException, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr
 import sqlite3
 import hashlib
 import os
+import time
 
 app = FastAPI(title="Gerenciador de Projetos - API")
 
 UPLOAD_DIR = "ARQUIVO_ENVIADO"
+UPLOAD_BASE_URL = "http://127.0.0.1:8000"
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
+
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
     
 
 app.add_middleware(
@@ -40,7 +45,26 @@ def inicializar_banco():
             status_usuario TEXT NOT NULL
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS arquivos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER,
+            nome_arquivo TEXT,
+            nome_original TEXT,
+            titulo TEXT,
+            instituicao TEXT,
+            criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(usuario_id) REFERENCES usuarios(id)
+        )
+    """)
     conn.commit()
+
+    cursor.execute("PRAGMA table_info(arquivos)")
+    columns = [row[1] for row in cursor.fetchall()]
+    if "nome_original" not in columns:
+        cursor.execute("ALTER TABLE arquivos ADD COLUMN nome_original TEXT")
+        conn.commit()
+
     conn.close()
 
 inicializar_banco()
@@ -114,24 +138,55 @@ def login_usuario(usuario: UsuarioLogin):
 
 @app.post("/upload")
 async def upload_arquivo(
+    usuario_id: int, # Adicione este campo no seu FormData no JS
     arquivo: UploadFile = File(...),
-    titulo_tcc: Optional[str] = None,      
-    instituicao: Optional[str] = None      
+    titulo_tcc: Optional[str] = None,
+    instituicao: Optional[str] = None
 ):
     try:
-        caminho_arquivo = os.path.join(UPLOAD_DIR, arquivo.filename)
-        
+        nome_original = os.path.basename(arquivo.filename)
+        arquivo_salvo = f"{usuario_id}_{int(time.time())}_{nome_original}"
+        caminho_arquivo = os.path.join(UPLOAD_DIR, arquivo_salvo)
+
         with open(caminho_arquivo, "wb") as f:
-            conteudo = await arquivo.read()
-            f.write(conteudo)
-            
-        
-        if titulo_tcc and instituicao:
-            print(f"--- NOVO TRABALHO ACADÊMICO RECEBIDO ---")
-            print(f"Título: {titulo_tcc} | Faculdade: {instituicao}")
-        
-        return {"message": f"Arquivo '{arquivo.filename}' salvo com sucesso no sistema!"}
-        
+            f.write(await arquivo.read())
+
+        conn = sqlite3.connect("sistema.db")
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO arquivos (usuario_id, nome_arquivo, nome_original, titulo, instituicao) VALUES (?, ?, ?, ?, ?)",
+            (usuario_id, arquivo_salvo, nome_original, titulo_tcc, instituicao)
+        )
+        conn.commit()
+        conn.close()
+
+        return {
+            "message": "Arquivo salvo e registrado com sucesso!",
+            "url": f"{UPLOAD_BASE_URL}/uploads/{arquivo_salvo}",
+            "nome_original": nome_original
+        }
     except Exception as e:
-        print(f"ERRO NO UPLOAD: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/meus-arquivos/{usuario_id}")
+def listar_arquivos(usuario_id: int):
+    conn = sqlite3.connect("sistema.db")
+    cursor = conn.cursor()
+    # Buscamos os dados formatados
+    cursor.execute(
+        "SELECT id, nome_arquivo, nome_original, titulo, instituicao FROM arquivos WHERE usuario_id = ?",
+        (usuario_id,)
+    )
+    arquivos = [
+        {
+            "id": row[0],
+            "url": f"{UPLOAD_BASE_URL}/uploads/{row[1]}",
+            "nome_original": row[2] if row[2] else row[1],
+            "titulo": row[3],
+            "instituicao": row[4]
+        }
+        for row in cursor.fetchall()
+    ]
+    
+    conn.close()
+    return {"arquivos": arquivos}
