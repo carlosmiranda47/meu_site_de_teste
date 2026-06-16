@@ -49,9 +49,19 @@
             </div>
         </section>
 
-        <section class="upload-container">
+        <section class="upload-container" id="container-upload-dinamico">
             <div class="search-title">📥 Compartilhar Novo Trabalho / Projeto</div>
             <form id="form-upload">
+                <div id="campos-academicos" class="upload-meta escondido">
+                    <div class="upload-field">
+                        <label for="upload-titulo-tcc">Título do Trabalho</label>
+                        <input type="text" id="upload-titulo-tcc" placeholder="Título do artigo ou projeto">
+                    </div>
+                    <div class="upload-field">
+                        <label for="upload-instituicao">Instituição / Empresa</label>
+                        <input type="text" id="upload-instituicao" placeholder="Instituição ou empresa">
+                    </div>
+                </div>
                 <div class="upload-area" onclick="document.getElementById('campo-arquivo').click()">
                     <span>📁</span>
                     <p>Clique para selecionar qualquer arquivo do seu PC (PDF, Imagens, Códigos, ZIP)</p>
@@ -62,6 +72,11 @@
                     <button type="submit" class="btn-enviar-arq">Enviar Arquivos para o Sistema</button>
                 </div>
             </form>
+        </section>
+
+        <section class="uploads-list-section">
+            <h2 class="section-title">Meus Arquivos</h2>
+            <div id="meus-arquivos-container" class="grid-trabalhos"></div>
         </section>
 
         <section>

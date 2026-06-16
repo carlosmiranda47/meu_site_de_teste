@@ -1,12 +1,13 @@
+// validação do email
 const URL_API = "http://127.0.0.1:8000";
 
+// Função de troca de exibição da tela de cadastro ou login 
 function alternarAbas(){
     document.getElementById("container-login").classList.toggle("escondido");
     document.getElementById("container-cadastro").classList.toggle("escondido"); 
-}
-
+}//MODO DE CADASTRO
 document.getElementById("form-cadastro").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Impedir a página de recarregar
     
     const nome = document.getElementById("cad-nome").value;
     const email = document.getElementById("cad-email").value;
@@ -23,6 +24,7 @@ document.getElementById("form-cadastro").addEventListener("submit", async (e) =>
         const dados = await resposta.json();
 
         if (resposta.ok) {
+            // Salva e redireciona direto
             localStorage.setItem("usuario_logado", JSON.stringify(dados.usuario));
             alert("Cadastro realizado com sucesso! Entrando no sistema...");
             window.location.href = "dashboard.html";
@@ -38,28 +40,31 @@ document.getElementById("form-cadastro").addEventListener("submit", async (e) =>
 
 document.getElementById("form-login").addEventListener("submit", async (e) => {
     e.preventDefault();
-    
+
     const email = document.getElementById("login-email").value;
     const senha = document.getElementById("login-senha").value;
-    
+
     try {
         const resposta = await fetch(`${URL_API}/login`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, senha })
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({email, senha})
         });
-
+        
         const dados = await resposta.json();
 
-        if (resposta.ok) {
-            localStorage.setItem("usuario_logado", JSON.stringify(dados.usuario));
-            alert("Login efetuado com sucesso! Bem-vindo.");
-            window.location.href = "dashboard.html";
-        } else {
-            alert("Erro no login: " + dados.detail);
-        }
-    } catch (erro) {
-        console.error(erro);
-        alert("Não foi possível conectar ao servidor.");
-    }
+     if (resposta.ok){
+
+        localStorage.setItem("usuario_logado",  JSON.stringify(dados.usuario));
+        alert("login realizado com sucesso!");
+        window.location.href = "dashboard.html";
+     } else {
+         const mensagemErro = typeof dados.detail === "string" ? dados.detail: dados.detail[0].msg;
+         alert("Erro no login:" + mensagemErro);
+     }
+ } catch(erro){
+     console.error(erro);
+     alert("Não foi possível conectar ao servidor.");
+
+ }
 });

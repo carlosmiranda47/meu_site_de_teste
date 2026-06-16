@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Arquivos - ConectaTrabalhos</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div>
+            <div class="brand">
+                <h2>ConectaTrabalhos</h2>
+            </div>
+            <div class="user-profile">
+                <h3 id="user-nome">Carregando...</h3>
+                <span id="user-status">...</span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="dashboard.html">🏠 Dashboard</a></li>
+                <li><a class="active" href="#">📤 Upload de Arquivos</a></li>
+                <li><a href="index.html">🔙 Voltar ao Login</a></li>
+            </ul>
+        </div>
+        <button class="btn-logout" onclick="fazerLogout()">🚪 Sair do Sistema</button>
+    </nav>
+
+    <main class="main-content">
+        <header class="header-welcome">
+            <h1>Enviar novo arquivo</h1>
+            <p>Faça upload de trabalhos acadêmicos, projetos ou arquivos de apoio.</p>
+        </header>
+
+        <section class="upload-container" id="upload-section">
+            <div class="search-title">📥 Upload de Arquivos</div>
+            <form id="form-upload" class="form-upload">
+                <div id="campos-academicos" class="upload-meta escondido">
+                    <div class="upload-field">
+                        <label for="upload-titulo-tcc">Título do Trabalho</label>
+                        <input type="text" id="upload-titulo-tcc" placeholder="Título do artigo ou projeto">
+                    </div>
+                    <div class="upload-field">
+                        <label for="upload-instituicao">Instituição / Empresa</label>
+                        <input type="text" id="upload-instituicao" placeholder="Instituição ou empresa">
+                    </div>
+                </div>
+                <div class="upload-area" onclick="document.getElementById('campo-arquivo').click()">
+                    <span>📁</span>
+                    <p>Clique para selecionar um arquivo (PDF, ZIP, imagens, código)</p>
+                    <input type="file" id="campo-arquivo" style="display: none;" required>
+                    <div id="nome-arquivo-selecionado">Nenhum arquivo selecionado</div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn-enviar-arq">Enviar Arquivo</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="uploads-list-section">
+            <h2 class="section-title">Meus Arquivos</h2>
+            <div id="meus-arquivos-container" class="grid-trabalhos"></div>
+        </section>
+    </main>
+
+    <script src="arquivo.js"></script>
+</body>
+</html>
